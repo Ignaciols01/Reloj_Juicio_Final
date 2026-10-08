@@ -97,17 +97,47 @@ function iniciarEdad() {
 // ==================================================
 // PUNTO 2: CUENTA ATRÁS
 // ==================================================
+let destinoAnoNuevo;
+let eventoAlcanzado = false;
 
-function descomponerDuracion() {
+function iniciarCuentaAtras() {
+  const ahora = dayjs();
+  const proximoAno = ahora.year() + 1;
+  // Fijamos la fecha de destino al 1 de enero del año que viene a las 00:00:00
+  destinoAnoNuevo = dayjs(`${proximoAno}-01-01T00:00:00`);
+  
+  document.getElementById('fecha-evento').textContent = `Destino: ${destinoAnoNuevo.format('D [de] MMMM [de] YYYY, HH:mm')}`;
+}
 
+function descomponerDuracion(milisegundos) {
+  const duracion = dayjs.duration(milisegundos);
+  return {
+    // asDays() devuelve días totales, usamos Math.floor para quitar decimales
+    dias: Math.floor(duracion.asDays()), 
+    horas: duracion.hours(),
+    minutos: duracion.minutes(),
+    segundos: duracion.seconds()
+  };
 }
 
 function actualizarCuentaAtras() {
+  if (eventoAlcanzado) return;
 
-}
+  const ahora = dayjs();
+  const diferenciaMs = destinoAnoNuevo.diff(ahora);
 
-function iniciarCuentaAtras() {
+  const estadoEvento = document.getElementById('estado-evento');
+  const contadorP = document.getElementById('contador');
 
+  if (diferenciaMs <= 0) {
+    eventoAlcanzado = true;
+    contadorP.textContent = '0 días, 0 horas, 0 minutos y 0 segundos';
+    estadoEvento.textContent = '¡El evento ha llegado!';
+    return;
+  }
+
+  const { dias, horas, minutos, segundos } = descomponerDuracion(diferenciaMs);
+  contadorP.textContent = `Faltan ${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos para Año Nuevo`;
 }
 
 // ==================================================
