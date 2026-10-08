@@ -145,7 +145,13 @@ function actualizarCuentaAtras() {
 // ==================================================
 
 function actualizarZonasHorarias() {
+  const ahora = dayjs();
+  const formato = 'DD/MM/YYYY HH:mm:ss';
 
+  document.getElementById('hora-local').textContent = ahora.format(formato);
+  document.getElementById('hora-tokio').textContent = ahora.tz('Asia/Tokyo').format(formato);
+  document.getElementById('hora-nueva-york').textContent = ahora.tz('America/New_York').format(formato);
+  document.getElementById('hora-sidney').textContent = ahora.tz('Australia/Sydney').format(formato);
 }
 
 // ==================================================
@@ -160,8 +166,6 @@ function actualizarRelojes() {
 iniciarEdad();
 iniciarCuentaAtras();
 
-// Ejecutamos la función nada más empezar y creamos un intervalo
+// Ejecutamos la función nada más empezar y creamos el intervalo
 actualizarRelojes();
-// Un intervalo permite ejecutar una función cada x segundos (1000ms == 1seg)
 setInterval(actualizarRelojes, 1000);
-
